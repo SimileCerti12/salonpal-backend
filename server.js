@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const axios = require('axios');
 const cron = require('node-cron');
 require('dotenv').config();
+// SalonPal Backend - Production Ready
 
 const app = express();
 const PORT = process.env.PORT || 5000;
