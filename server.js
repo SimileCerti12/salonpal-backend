@@ -27,10 +27,7 @@ app.post('/api/auth/register', async (req, res) => {
   try {
     const { email, password, salon_name } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
-    const result = await pool.query(
-      'INSERT INTO salons (email, password, salon_name) VALUES ($1, $2, $3) RETURNING id, email, salon_name',
-      [email, hashedPassword, salon_name]
-    );
+    const result = await pool.query('INSERT INTO salons (email, password, salon_name) VALUES (, , ) RETURNING id, email, salon_name', [email, hashedPassword, salon_name]);
     const token = jwt.sign({ id: result.rows[0].id }, process.env.JWT_SECRET || 'secret', { expiresIn: '7d' });
     res.status(201).json({ salon_id: result.rows[0].id, email: result.rows[0].email, salon_name: result.rows[0].salon_name, token });
   } catch (error) {
@@ -41,7 +38,7 @@ app.post('/api/auth/register', async (req, res) => {
 app.post('/api/auth/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-    const result = await pool.query('SELECT * FROM salons WHERE email = $1', [email]);
+    const result = await pool.query('SELECT * FROM salons WHERE email = ', [email]);
     if (result.rows.length === 0) return res.status(401).json({ error: 'Invalid credentials' });
     const salon = result.rows[0];
     const passwordMatch = await bcrypt.compare(password, salon.password);
@@ -54,5 +51,5 @@ app.post('/api/auth/login', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(Server running on port );
 });
